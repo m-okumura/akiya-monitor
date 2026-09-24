@@ -11,11 +11,13 @@ function decodeLegacyBase64Url(param) {
   }
 }
 
-function readBuildingName() {
+function readParams() {
   const params = new URLSearchParams(window.location.search);
   const q = params.get("q");
-  if (q) return q;
-  return decodeLegacyBase64Url(params.get("n"));
+  const displayName = q || decodeLegacyBase64Url(params.get("n"));
+  const k = params.get("k");
+  const searchKana = (k || displayName).trim();
+  return { displayName: displayName.trim(), searchKana };
 }
 
 function copyText(text) {
@@ -43,28 +45,33 @@ function copyText(text) {
 }
 
 function init() {
-  const name = readBuildingName().trim();
+  const { displayName, searchKana } = readParams();
   const nameEl = document.getElementById("building-name");
+  const kanaEl = document.getElementById("building-kana");
   const copyBtn = document.getElementById("copy-name");
   const statusEl = document.getElementById("copy-status");
 
-  if (!nameEl || !copyBtn || !statusEl) return;
+  if (!nameEl || !kanaEl || !copyBtn || !statusEl) return;
 
-  nameEl.textContent = name || "（建物名がありません。メール内の表記をコピーしてください）";
-  copyBtn.disabled = !name;
+  nameEl.textContent =
+    displayName || "（建物名がありません。メール内の表記を確認してください）";
+  kanaEl.textContent = searchKana
+    ? `住宅名（カナ）: ${searchKana}`
+    : "（カナがありません）";
+  copyBtn.disabled = !searchKana;
 
   copyBtn.addEventListener("click", () => {
-    if (!name) {
-      statusEl.textContent = "コピーする建物名がありません";
+    if (!searchKana) {
+      statusEl.textContent = "コピーするカナがありません";
       return;
     }
-    copyText(name)
+    copyText(searchKana)
       .then(() => {
-        statusEl.textContent = "住宅名をコピーしました";
+        statusEl.textContent = "住宅名（カナ）をコピーしました";
       })
       .catch(() => {
         statusEl.textContent =
-          "自動コピーできませんでした。上の建物名を長押し／ドラッグで選択してコピーしてください";
+          "自動コピーできませんでした。上のカナ行を長押し／ドラッグで選択してコピーしてください";
       });
   });
 }

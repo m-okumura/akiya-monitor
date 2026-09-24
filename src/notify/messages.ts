@@ -43,7 +43,7 @@ function renderListingsBody(listings: Listing[]): string {
     const items = groups.get(ward) ?? [];
     const rows = items
       .map((listing) => {
-        const url = buildListingLinkForEmail(listing.name);
+        const url = buildListingLinkForEmail(listing);
         return `<li style="margin: 0.35em 0;">
           <a href="${escapeHtml(url)}" style="color: #0b57d0; text-decoration: underline;" title="JKK空き家検索の開き方">${escapeHtml(listing.name)}</a>
           <span style="color: #333;"> — ${escapeHtml(formatRentLine(listing))}</span>
@@ -71,7 +71,7 @@ function buildListingsMail(options: {
     ${introHtml}
     <p style="color: #444;">検索条件: 東京都 / 専有面積 ${config.mensekiMin}㎡以上 / 家賃制限なし</p>
     <p style="color: #444;">サイト表示の該当総数: ${totalCount} 件 / このメールの掲載: ${listings.length} 件</p>
-    <p style="color: #666; font-size: 0.9em;">※マンション名リンクは<strong>JKK 公式の開き方ページ</strong>です（メールから JKK 直リンクすると混雑エラーになるため）。ページ内の手順で空き家検索を開き、住宅名を検索してください。</p>
+    <p style="color: #666; font-size: 0.9em;">※マンション名リンクは<strong>JKK 公式の開き方ページ</strong>です。JKK の「住宅名（カナ）」欄用の読みをコピーできます（漢字のままでは検索できません）。</p>
     ${renderListingsBody(listings)}
     <p style="margin-top: 1.2em;"><a href="https://www.to-kousya.or.jp/chintai/index.html">JKKねっと（都営住宅）トップ</a></p>
   `;

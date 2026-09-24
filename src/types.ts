@@ -1,6 +1,8 @@
 export type Listing = {
   id: string;
   name: string;
+  /** JKK 検索フォーム「住宅名(カナ)」用（実行時に付与） */
+  searchKana?: string;
   ward: string;
   layout: string;
   areaSqm: number;

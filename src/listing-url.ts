@@ -11,9 +11,13 @@ function bridgeBaseUrl(): string | null {
 }
 
 /** メール用: JKK 直リンクではなく中継ページ（Gmail 等の prefetch 回避 + 公式導線） */
-export function buildListingLinkForEmail(buildingName: string): string {
+export function buildListingLinkForEmail(listing: {
+  name: string;
+  searchKana?: string;
+}): string {
   const base = bridgeBaseUrl();
   if (!base) return JKK_AKIYA_ENTRY_URL;
-  const q = encodeURIComponent(buildingName);
-  return `${base.replace(/\/$/, "")}/link/?q=${q}`;
+  const q = encodeURIComponent(listing.name);
+  const k = encodeURIComponent(listing.searchKana ?? listing.name);
+  return `${base.replace(/\/$/, "")}/link/?q=${q}&k=${k}`;
 }

@@ -4,6 +4,7 @@ import { createNotifier, isNotifierConfigured } from "./notify/index.js";
 import { applyOptionalFilters } from "./filter.js";
 import { JkkClient } from "./jkk-client.js";
 import { parseListings, parseResultCount } from "./parse-listings.js";
+import { enrichListingsWithSearchKana } from "./search-kana.js";
 import { diffListingIds, loadState, saveState } from "./state.js";
 
 async function main(): Promise<void> {
@@ -19,6 +20,7 @@ async function main(): Promise<void> {
     mensekiMin: config.mensekiMin,
     yachinMax: config.yachinMax,
   });
+  listings = await enrichListingsWithSearchKana(listings);
 
   console.log(`該当 ${totalCount} 件 / パース ${listings.length} 件`);
 
