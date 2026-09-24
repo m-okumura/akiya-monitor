@@ -11,7 +11,7 @@
 ## 技術スタック
 
 - Node.js 22 + TypeScript（`tsx` で実行）
-- cheerio（HTML パース）、iconv-lite（Shift_JIS）、nodemailer
+- cheerio（HTML パース）、iconv-lite（Shift_JIS）、resend / nodemailer（通知）
 - GitHub Actions Cron + Actions Cache（`.data/state.json`）
 
 ## よく使うコマンド
@@ -26,7 +26,9 @@ npm run build    # tsc --noEmit
 
 | 変数 | 必須 | 説明 |
 |------|------|------|
-| `MAIL_HOST` / `MAIL_PORT` / `MAIL_USER` / `MAIL_PASSWORD` / `MAIL_TO` | 本番 | SMTP |
+| `NOTIFY_PROVIDER` | 任意 | `resend`（本番）または `smtp`（デフォルト smtp） |
+| `RESEND_API_KEY` / `MAIL_TO` | Resend 時 | API 送信 |
+| `MAIL_HOST` … / `MAIL_TO` | SMTP 時 | nodemailer |
 | `MAIL_FROM` | 任意 | From |
 | `MENSEKI_MIN` | 任意 | デフォルト 40 |
 | `YACHIN_MAX` | 任意 | 家賃上限（円）。未設定で無制限 |

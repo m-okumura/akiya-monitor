@@ -9,7 +9,7 @@
 
 ```bash
 npm ci
-export MAIL_HOST=... MAIL_PORT=587 MAIL_USER=... MAIL_PASSWORD=... MAIL_TO=...
+export NOTIFY_PROVIDER=resend RESEND_API_KEY=re_... MAIL_TO=you@example.com
 npm run check
 ```
 

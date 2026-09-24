@@ -6,17 +6,17 @@
 
 - **schedule**: 毎日 7:00 JST（UTC 22:00）
 - **workflow_dispatch**: 手動実行
+- **通知**: `NOTIFY_PROVIDER=resend`（Secrets 参照）
 
 ## Secrets（Repository secrets）
 
-| Name | 説明 |
-|------|------|
-| `MAIL_HOST` | SMTP ホスト |
-| `MAIL_PORT` | 例: `587` |
-| `MAIL_USER` | SMTP ユーザー |
-| `MAIL_PASSWORD` | SMTP パスワード |
-| `MAIL_TO` | 通知先 |
-| `MAIL_FROM` | （任意） |
+| Name | 必須 | 説明 |
+|------|------|------|
+| `RESEND_API_KEY` | ○ | [Resend](https://resend.com/) の API キー |
+| `MAIL_TO` | ○ | 通知先メール |
+| `MAIL_FROM` | 任意 | 未設定時 `JKK空き家監視 <onboarding@resend.dev>` |
+
+SMTP に戻す場合は workflow の `env` を `NOTIFY_PROVIDER=smtp` と `MAIL_HOST` 等に変更。
 
 ## 状態ファイル
 
@@ -26,11 +26,12 @@
 
 ## 初回デプロイ手順
 
-1. ローカルで `npm run check` が通ることを確認
-2. `main` に push
-3. **Settings → Secrets** を登録
-4. Actions → **Run workflow** で手動 1 回（state 初期化）
-5. 翌日以降、新規物件があればメール
+1. Resend で API キー発行
+2. ローカルで `npm run check` が通ることを確認
+3. `main` に push
+4. **Settings → Secrets** に `RESEND_API_KEY` と `MAIL_TO` を登録
+5. Actions → **Run workflow** で手動 1 回（state 初期化）
+6. 翌日以降、新規物件があればメール
 
 ## Cloud Agent について
 

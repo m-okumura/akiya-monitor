@@ -8,7 +8,7 @@ sequenceDiagram
   participant App as src/index.ts
   participant JKK as jhomes.to-kousya.or.jp
   participant Cache as Actions Cache
-  participant SMTP as SMTP
+  participant Notify as Resend / SMTP
 
   GA->>App: npm run check（毎日 7:00 JST）
   App->>JKK: セッション開始 + 条件検索 POST
@@ -17,7 +17,7 @@ sequenceDiagram
   App->>Cache: 前回 state 読込
   App->>Cache: 今回 state 保存
   alt 新規物件あり
-    App->>SMTP: 通知メール
+    App->>Notify: 通知メール
   else 初回 or 変更なし
     App->>App: 通知スキップ
   end
@@ -31,7 +31,7 @@ sequenceDiagram
 | `src/parse-listings.ts` | 結果 HTML から物件一覧 |
 | `src/state.ts` | `.data/state.json` 読み書き |
 | `src/filter.ts` | 任意の家賃上限フィルタ |
-| `src/email.ts` | nodemailer 送信 |
+| `src/notify/` | メール送信（Resend API / SMTP） |
 | `src/index.ts` | オーケストレーション |
 
 ## 物件 ID
@@ -41,6 +41,6 @@ sequenceDiagram
 ## 外部依存
 
 - JKK Web（非公式 API・HTML スクレイピング）
-- SMTP（既存案件と同様の nodemailer 構成）
+- Resend API（本番デフォルト）または SMTP（`NOTIFY_PROVIDER=smtp`）
 
 HTML 変更でパーサが壊れるリスクあり。取得失敗時はエラーメールを送る。

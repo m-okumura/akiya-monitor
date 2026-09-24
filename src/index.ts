@@ -1,6 +1,6 @@
 import path from "node:path";
 import { config } from "./config.js";
-import { sendFailureEmail, sendNewListingsEmail } from "./email.js";
+import { createNotifier, isNotifierConfigured } from "./notify/index.js";
 import { applyOptionalFilters } from "./filter.js";
 import { JkkClient } from "./jkk-client.js";
 import { parseListings, parseResultCount } from "./parse-listings.js";
@@ -9,6 +9,7 @@ import { diffListingIds, loadState, saveState } from "./state.js";
 async function main(): Promise<void> {
   const statePath = path.resolve(process.cwd(), config.statePath);
   const client = new JkkClient(config.mensekiMin);
+  const notifier = createNotifier();
 
   console.log("JKK空き家監視を開始します…");
   const html = await client.fetchSearchResults();
@@ -43,16 +44,18 @@ async function main(): Promise<void> {
     return;
   }
 
-  console.log(`新規 ${newListings.length} 件をメール送信します`);
-  await sendNewListingsEmail(newListings, totalCount);
+  console.log(
+    `新規 ${newListings.length} 件をメール送信します（${config.notifyProvider}）`,
+  );
+  await notifier.sendNewListings(newListings, totalCount);
 }
 
 main().catch(async (error) => {
   const message = error instanceof Error ? error.stack ?? error.message : String(error);
   console.error(message);
   try {
-    if (process.env.MAIL_HOST && process.env.MAIL_TO) {
-      await sendFailureEmail(message);
+    if (isNotifierConfigured()) {
+      await createNotifier().sendFailure(message);
     }
   } catch (mailError) {
     console.error("失敗通知メールも送信できませんでした:", mailError);

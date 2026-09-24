@@ -17,7 +17,7 @@
 - 専有面積: 40㎡ 以上
 - 家賃: 制限なし（件数優先）
 - 実行基盤: GitHub Actions（AWS 等は使わない）
-- 通知: SMTP（nodemailer）
+- 通知: Resend API（本番）/ SMTP 任意
 
 ## ステータス
 

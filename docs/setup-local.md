@@ -26,15 +26,30 @@ cd PRJ-AKIYA_JKK空き家監視
 npm ci
 ```
 
-## 環境変数
+## 環境変数（Resend・推奨）
+
+[Resend](https://resend.com/) で API キーを発行し、通知先メールを設定します。
 
 PowerShell 例:
 
 ```powershell
-$env:MAIL_HOST = "smtp.example.com"
+$env:NOTIFY_PROVIDER = "resend"
+$env:RESEND_API_KEY = "re_..."
+$env:MAIL_TO = "you@example.com"
+# 任意（未設定時は onboarding@resend.dev ※ Resend アカウントと同じ受信先向け）
+# $env:MAIL_FROM = "JKK空き家監視 <onboarding@resend.dev>"
+```
+
+## 環境変数（SMTP・任意）
+
+Gmail 等の SMTP を使う場合:
+
+```powershell
+$env:NOTIFY_PROVIDER = "smtp"
+$env:MAIL_HOST = "smtp.gmail.com"
 $env:MAIL_PORT = "587"
-$env:MAIL_USER = "user"
-$env:MAIL_PASSWORD = "pass"
+$env:MAIL_USER = "you@gmail.com"
+$env:MAIL_PASSWORD = "アプリパスワード"
 $env:MAIL_TO = "you@example.com"
 ```
 
