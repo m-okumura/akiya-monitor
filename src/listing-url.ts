@@ -1,12 +1,19 @@
-import iconv from "iconv-lite";
+/** JKK 空き家検索の公式入口（セッション開始用） */
+export const JKK_AKIYA_ENTRY_URL =
+  "https://jhomes.to-kousya.or.jp/search/jkknet/service/akiyaJyoukenStartInit";
 
-const JKK_BUILDING_SEARCH_BASE =
-  "https://jhomes.to-kousya.or.jp/search/jkknet/service/akiyaJyokenDirect";
+const DEFAULT_BRIDGE_BASE = "https://m-okumura.github.io/akiya-monitor";
 
-/** 住宅名で JKK 空き家検索（建物単位）へ deep link */
-export function buildBuildingSearchUrl(buildingName: string): string {
-  const hex = [...iconv.encode(buildingName, "Shift_JIS")]
-    .map((byte) => byte.toString(16).toUpperCase().padStart(2, "0"))
-    .join("");
-  return `${JKK_BUILDING_SEARCH_BASE}?jutaku_name=${hex}&sen_flg=1`;
+function bridgeBaseUrl(): string | null {
+  const raw = process.env.LISTING_LINK_BRIDGE_BASE?.trim();
+  if (raw === "off" || raw === "false") return null;
+  return raw || DEFAULT_BRIDGE_BASE;
+}
+
+/** メール用: JKK 直リンクではなく中継ページ（Gmail 等の prefetch 回避 + 公式導線） */
+export function buildListingLinkForEmail(buildingName: string): string {
+  const base = bridgeBaseUrl();
+  if (!base) return JKK_AKIYA_ENTRY_URL;
+  const encoded = Buffer.from(buildingName, "utf8").toString("base64url");
+  return `${base.replace(/\/$/, "")}/link/?n=${encoded}`;
 }

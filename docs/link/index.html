@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JKK空き家 — 建物を開く</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        max-width: 40rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        color: #222;
+      }
+      .name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0.5rem 0 1rem;
+      }
+      .note {
+        color: #555;
+        font-size: 0.95rem;
+      }
+      .actions {
+        margin: 1.25rem 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      a.button,
+      button {
+        font: inherit;
+        padding: 0.6rem 1rem;
+        border-radius: 6px;
+        border: 1px solid #0b57d0;
+        background: #0b57d0;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      button.secondary {
+        background: #fff;
+        color: #0b57d0;
+      }
+      ol {
+        padding-left: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JKK 空き家検索</h1>
+    <p class="note">
+      JKK ねっとはメール・ブックマークからの<strong>住宅直リンク</strong>だと「混雑」等のエラーになることがあります。
+      公式の空き家検索から開いてください。
+    </p>
+    <p>建物名</p>
+    <p class="name" id="building-name">（読み込み中…）</p>
+    <ol>
+      <li>下のボタンで <strong>JKK 空き家検索</strong>を開く</li>
+      <li>条件画面の <strong>住宅名</strong> に上記を入力して検索</li>
+      <li>一覧の「詳細」から建物情報を確認</li>
+    </ol>
+    <div class="actions">
+      <a
+        class="button"
+        id="open-jkk"
+        href="https://jhomes.to-kousya.or.jp/search/jkknet/service/akiyaJyoukenStartInit"
+        target="_blank"
+        rel="noopener noreferrer"
+        >JKK 空き家検索を開く</a
+      >
+      <button type="button" class="secondary" id="copy-name">住宅名をコピー</button>
+    </div>
+    <p class="note">
+      <a href="https://www.to-kousya.or.jp/kouei/to/jkk-net.html">空家検索/申込（JKK東京）</a>
+    </p>
+    <script>
+      const entryUrl =
+        "https://jhomes.to-kousya.or.jp/search/jkknet/service/akiyaJyoukenStartInit";
+
+      function decodeNameParam(param) {
+        if (!param) return "";
+        const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
+        const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
+        const binary = atob(padded);
+        const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+        return new TextDecoder().decode(bytes);
+      }
+
+      const name = decodeNameParam(new URLSearchParams(location.search).get("n"));
+      const nameEl = document.getElementById("building-name");
+      const copyBtn = document.getElementById("copy-name");
+      nameEl.textContent = name || "（建物名がありません）";
+      document.getElementById("open-jkk").href = entryUrl;
+
+      copyBtn.addEventListener("click", async () => {
+        if (!name) return;
+        try {
+          await navigator.clipboard.writeText(name);
+          copyBtn.textContent = "コピーしました";
+        } catch {
+          copyBtn.textContent = "コピーできませんでした";
+        }
+      });
+    </script>
+  </body>
+</html>
