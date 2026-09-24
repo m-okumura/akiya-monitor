@@ -23,6 +23,15 @@ async function main(): Promise<void> {
   console.log(`該当 ${totalCount} 件 / パース ${listings.length} 件`);
 
   const currentIds = listings.map((l) => l.id);
+
+  if (config.snapshotEmail) {
+    console.log(
+      `スナップショット: ${listings.length} 件をメール送信します（${config.notifyProvider}）`,
+    );
+    await notifier.sendSnapshot(listings, totalCount);
+    await saveState(statePath, currentIds);
+    return;
+  }
   const previous = await loadState(statePath);
   const previousIds = new Set(previous?.listingIds ?? []);
   const isFirstRun = previous === null;

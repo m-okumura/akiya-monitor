@@ -42,6 +42,7 @@ export const config = {
   mensekiMin: optionalInt("MENSEKI_MIN") ?? 40,
   yachinMax: optionalInt("YACHIN_MAX"),
   notifyOnFirstRun: process.env.NOTIFY_ON_FIRST_RUN === "true",
+  snapshotEmail: process.env.SNAPSHOT_EMAIL === "true",
   notifyProvider,
   notify: {
     to: () => requireEnv("MAIL_TO"),

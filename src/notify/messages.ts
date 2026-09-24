@@ -33,6 +33,31 @@ export function buildNewListingsMail(
   };
 }
 
+export function buildSnapshotMail(
+  listings: Listing[],
+  totalCount: number,
+): { subject: string; html: string } {
+  const lines = listings
+    .map(
+      (l) =>
+        `・${l.name}（${l.ward}） ${l.layout} / ${l.areaSqm}㎡ / 家賃 ${l.rentYen}円 [ID:${l.id}]`,
+    )
+    .join("\n");
+
+  const html = `
+    <p>JKK空き家（先着順）の<strong>現時点</strong>の該当物件一覧です（手動スナップショット）。</p>
+    <p>検索条件: 東京都 / 専有面積 ${config.mensekiMin}㎡以上 / 家賃制限なし</p>
+    <p>サイト表示の該当総数: ${totalCount} 件 / このメールに載せた件数: ${listings.length} 件</p>
+    <pre style="font-family: sans-serif; white-space: pre-wrap;">${escapeHtml(lines)}</pre>
+    <p><a href="https://www.to-kousya.or.jp/chintai/index.html">JKKねっと（都営住宅）</a></p>
+  `;
+
+  return {
+    subject: `[JKK空き家] 現時点 ${listings.length} 件（該当 ${totalCount} 件）`,
+    html,
+  };
+}
+
 export function buildFailureMail(message: string): { subject: string; html: string } {
   return {
     subject: "[JKK空き家] 監視エラー",

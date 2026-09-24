@@ -5,7 +5,7 @@
 `.github/workflows/jkk-akiya-monitor.yml`
 
 - **schedule**: 毎日 7:00 JST（UTC 22:00）
-- **workflow_dispatch**: 手動実行
+- **workflow_dispatch**: 手動実行（オプション **snapshot_email** で現時点一覧メール）
 - **通知**: `NOTIFY_PROVIDER=resend`（Secrets 参照）
 
 ## Secrets（Repository secrets）
