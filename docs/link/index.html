@@ -15,9 +15,10 @@
     <p>建物名（表示）</p>
     <p class="name" id="building-name">（読み込み中…）</p>
     <p class="name kana" id="building-kana">（読み込み中…）</p>
+    <p class="name kana-value" id="building-kana-copy" hidden></p>
     <ol>
       <li>下のボタンで <strong>JKK 空き家検索</strong>を開く</li>
-      <li>条件画面の <strong>住宅名（カナ）</strong> に、下のカナを貼り付けて検索</li>
+      <li>条件画面の <strong>住宅名（カナ）</strong> に、青字のカナを貼り付けて検索</li>
       <li>一覧の「詳細」から建物情報を確認</li>
     </ol>
     <div class="actions">
@@ -33,6 +34,7 @@
     <p class="note">
       <a href="https://www.to-kousya.or.jp/kouei/to/jkk-net.html">空家検索/申込（JKK東京）</a>
     </p>
-    <script src="./link.js" defer></script>
+    <!-- 外部 link.js のキャッシュずれを避けるため同一ロジックをインライン配置 -->
+    <script src="./link.js?v=20260924-2"></script>
   </body>
 </html>

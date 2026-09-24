@@ -18,6 +18,10 @@ export function buildListingLinkForEmail(listing: {
   const base = bridgeBaseUrl();
   if (!base) return JKK_AKIYA_ENTRY_URL;
   const q = encodeURIComponent(listing.name);
-  const k = encodeURIComponent(listing.searchKana ?? listing.name);
+  const kana = listing.searchKana?.trim();
+  if (!kana) {
+    return `${base.replace(/\/$/, "")}/link/?q=${q}`;
+  }
+  const k = encodeURIComponent(kana);
   return `${base.replace(/\/$/, "")}/link/?q=${q}&k=${k}`;
 }
