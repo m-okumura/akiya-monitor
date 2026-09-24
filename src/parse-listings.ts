@@ -12,7 +12,7 @@ export function parseListings(html: string): Listing[] {
     );
     if (!match) return;
 
-    const [, , boshuNo, jyutakuCd, mskKbn] = match;
+    const [, boshuNo, mskKbn, jyutakuCd, yusenKbn] = match;
     const cells = $(anchor)
       .closest("tr")
       .find("td")
@@ -27,10 +27,11 @@ export function parseListings(html: string): Listing[] {
     const commonFeeYen = cells[8] ?? "";
 
     listings.push({
-      id: `${boshuNo}-${jyutakuCd}-${mskKbn}`,
+      id: `${mskKbn}-${jyutakuCd}-${yusenKbn}`,
       boshuNo,
-      jyutakuCd,
       mskKbn,
+      jyutakuCd,
+      yusenKbn,
       name,
       ward,
       layout,

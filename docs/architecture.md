@@ -36,7 +36,7 @@ sequenceDiagram
 
 ## 物件 ID
 
-`{boshuNo}-{jyutakuCd}-{mskKbn}`（詳細ボタン `senPage` から取得）
+`{mskKbn}-{jyutakuCd}-{yusenKbn}`（詳細ボタン `senPage` から取得）
 
 ## 外部依存
 

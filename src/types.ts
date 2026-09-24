@@ -7,8 +7,9 @@ export type Listing = {
   rentYen: string;
   commonFeeYen: string;
   boshuNo: string;
-  jyutakuCd: string;
   mskKbn: string;
+  jyutakuCd: string;
+  yusenKbn: string;
 };
 
 export type MonitorState = {
