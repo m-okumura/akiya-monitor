@@ -1,14 +1,16 @@
 import kuromoji from "kuromoji";
 import type { Listing } from "./types.js";
 
-let tokenizerPromise: Promise<kuromoji.Tokenizer> | null = null;
+type JkkTokenizer = kuromoji.Tokenizer<kuromoji.IpadicFeatures>;
 
-function getTokenizer(): Promise<kuromoji.Tokenizer> {
+let tokenizerPromise: Promise<JkkTokenizer> | null = null;
+
+function getTokenizer(): Promise<JkkTokenizer> {
   if (!tokenizerPromise) {
     tokenizerPromise = new Promise((resolve, reject) => {
       kuromoji
         .builder({ dicPath: "node_modules/kuromoji/dict" })
-        .build((error, tokenizer) => {
+        .build((error: Error | null, tokenizer: JkkTokenizer) => {
           if (error) reject(error);
           else resolve(tokenizer);
         });
@@ -22,7 +24,7 @@ export async function toJkkSearchKana(name: string): Promise<string> {
   const tokenizer = await getTokenizer();
   const tokens = tokenizer.tokenize(name.trim());
   const kana = tokens
-    .map((token) => token.reading ?? token.surface_form)
+    .map((token: kuromoji.IpadicFeatures) => token.reading ?? token.surface_form)
     .join("");
   return kana || name;
 }
