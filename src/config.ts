@@ -32,9 +32,15 @@ const notifyProvider = parseNotifyProvider();
 
 function defaultFromAddress(): string {
   if (notifyProvider === "resend") {
-    return "JKK空き家監視 <onboarding@resend.dev>";
+    return "JKK Akiya Monitor <onboarding@resend.dev>";
   }
   return "JKK空き家監視<monitor@localhost>";
+}
+
+function resolveFromAddress(): string {
+  const raw = process.env.MAIL_FROM?.trim();
+  if (raw) return raw;
+  return defaultFromAddress();
 }
 
 export const config = {
@@ -46,7 +52,7 @@ export const config = {
   notifyProvider,
   notify: {
     to: () => requireEnv("MAIL_TO"),
-    from: () => process.env.MAIL_FROM ?? defaultFromAddress(),
+    from: () => resolveFromAddress(),
   },
   resend: {
     apiKey: () => requireEnv("RESEND_API_KEY"),
