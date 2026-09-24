@@ -1,0 +1,25 @@
+{
+  "name": "akiya-monitor",
+  "version": "1.0.0",
+  "description": "PRJ-AKIYA: JKK空き家（先着順）日次監視",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsx src/index.ts",
+    "build": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "iconv-lite": "^0.6.3",
+    "nodemailer": "^6.9.15"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/nodemailer": "^6.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

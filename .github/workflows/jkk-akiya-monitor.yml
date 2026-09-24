@@ -1,0 +1,40 @@
+name: JKK Akiya Monitor
+
+on:
+  schedule:
+    # 毎日 7:00 JST（UTC 22:00）
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Restore listing state
+        uses: actions/cache@v4
+        with:
+          path: .data/state.json
+          key: jkk-akiya-monitor-state
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run daily check
+        env:
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_USER: ${{ secrets.MAIL_USER }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          MAIL_FROM: ${{ secrets.MAIL_FROM }}
+          MENSEKI_MIN: "40"
+          NOTIFY_ON_FIRST_RUN: "false"
+        run: npm run check
