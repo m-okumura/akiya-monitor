@@ -14,6 +14,6 @@ function bridgeBaseUrl(): string | null {
 export function buildListingLinkForEmail(buildingName: string): string {
   const base = bridgeBaseUrl();
   if (!base) return JKK_AKIYA_ENTRY_URL;
-  const encoded = Buffer.from(buildingName, "utf8").toString("base64url");
-  return `${base.replace(/\/$/, "")}/link/?n=${encoded}`;
+  const q = encodeURIComponent(buildingName);
+  return `${base.replace(/\/$/, "")}/link/?q=${q}`;
 }
