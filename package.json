@@ -12,6 +12,7 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "cheerio": "^1.0.0",
     "iconv-lite": "^0.6.3",
     "kuromoji": "^0.1.2",

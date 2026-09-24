@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
-import type { Listing } from "../types.js";
 import { config } from "../config.js";
 import {
   buildFailureMail,
   buildNewListingsMail,
   buildSnapshotMail,
 } from "./messages.js";
-import type { Notifier } from "./types.js";
+import type { MailContext, Notifier } from "./types.js";
+import type { ScoredListing } from "../types.js";
 
 function createTransporter() {
   return nodemailer.createTransport({
@@ -20,8 +20,11 @@ function createTransporter() {
 }
 
 export const smtpNotifier: Notifier = {
-  async sendNewListings(listings: Listing[], totalCount: number): Promise<void> {
-    const { subject, html } = buildNewListingsMail(listings, totalCount);
+  async sendNewListings(
+    listings: ScoredListing[],
+    context: MailContext,
+  ): Promise<void> {
+    const { subject, html } = buildNewListingsMail(listings, context);
     await createTransporter().sendMail({
       from: config.notify.from(),
       to: config.notify.to(),
@@ -30,8 +33,11 @@ export const smtpNotifier: Notifier = {
     });
   },
 
-  async sendSnapshot(listings: Listing[], totalCount: number): Promise<void> {
-    const { subject, html } = buildSnapshotMail(listings, totalCount);
+  async sendSnapshot(
+    listings: ScoredListing[],
+    context: MailContext,
+  ): Promise<void> {
+    const { subject, html } = buildSnapshotMail(listings, context);
     await createTransporter().sendMail({
       from: config.notify.from(),
       to: config.notify.to(),

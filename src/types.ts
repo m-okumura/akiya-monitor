@@ -19,3 +19,9 @@ export type MonitorState = {
   updatedAt: string;
   listingIds: string[];
 };
+
+export type ScoredListing = Listing & {
+  score: number;
+  tier: "recommended" | "neutral" | "caution";
+  scoreReasons: string[];
+};

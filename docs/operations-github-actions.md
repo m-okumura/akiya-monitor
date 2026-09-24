@@ -14,9 +14,15 @@
 |------|------|------|
 | `RESEND_API_KEY` | ○ | [Resend](https://resend.com/) の API キー |
 | `MAIL_TO` | ○ | 通知先メール |
-| `MAIL_FROM` | 任意 | 未設定時 `JKK空き家監視 <onboarding@resend.dev>` |
+| `MAIL_FROM` | 任意 | 未設定時 `JKK Akiya Monitor <onboarding@resend.dev>` |
+| `GEMINI_API_KEY` | ○（AI 利用時） | OSAKA 監視と同じキーで可 |
 
 SMTP に戻す場合は workflow の `env` を `NOTIFY_PROVIDER=smtp` と `MAIL_HOST` 等に変更。
+
+## 手動実行の注意
+
+- **Run workflow**（main 最新）で実行する。**過去 Run の Re-run** は古い commit のまま動く。
+- `snapshot_email: true` でスナップショット＋AI メモ付き一覧メール。
 
 ## 状態ファイル
 

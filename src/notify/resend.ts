@@ -1,20 +1,23 @@
 import { Resend } from "resend";
-import type { Listing } from "../types.js";
 import { config } from "../config.js";
 import {
   buildFailureMail,
   buildNewListingsMail,
   buildSnapshotMail,
 } from "./messages.js";
-import type { Notifier } from "./types.js";
+import type { MailContext, Notifier } from "./types.js";
+import type { ScoredListing } from "../types.js";
 
 function client(): Resend {
   return new Resend(config.resend.apiKey());
 }
 
 export const resendNotifier: Notifier = {
-  async sendNewListings(listings: Listing[], totalCount: number): Promise<void> {
-    const { subject, html } = buildNewListingsMail(listings, totalCount);
+  async sendNewListings(
+    listings: ScoredListing[],
+    context: MailContext,
+  ): Promise<void> {
+    const { subject, html } = buildNewListingsMail(listings, context);
     const { error } = await client().emails.send({
       from: config.notify.from(),
       to: config.notify.to(),
@@ -26,8 +29,11 @@ export const resendNotifier: Notifier = {
     }
   },
 
-  async sendSnapshot(listings: Listing[], totalCount: number): Promise<void> {
-    const { subject, html } = buildSnapshotMail(listings, totalCount);
+  async sendSnapshot(
+    listings: ScoredListing[],
+    context: MailContext,
+  ): Promise<void> {
+    const { subject, html } = buildSnapshotMail(listings, context);
     const { error } = await client().emails.send({
       from: config.notify.from(),
       to: config.notify.to(),

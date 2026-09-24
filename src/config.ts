@@ -18,8 +18,13 @@ function optionalInt(name: string): number | undefined {
   return n;
 }
 
+function optionalEnv(name: string): string | undefined {
+  const raw = process.env[name]?.trim();
+  return raw || undefined;
+}
+
 function parseNotifyProvider(): NotifyProvider {
-  const raw = process.env.NOTIFY_PROVIDER ?? "smtp";
+  const raw = process.env.NOTIFY_PROVIDER ?? "resend";
   if (raw === "smtp" || raw === "resend") {
     return raw;
   }
@@ -46,10 +51,16 @@ function resolveFromAddress(): string {
 export const config = {
   statePath: process.env.STATE_PATH ?? ".data/state.json",
   mensekiMin: optionalInt("MENSEKI_MIN") ?? 40,
-  yachinMax: optionalInt("YACHIN_MAX"),
+  yachinMax: optionalInt("YACHIN_MAX") ?? 100_000,
   notifyOnFirstRun: process.env.NOTIFY_ON_FIRST_RUN === "true",
   snapshotEmail: process.env.SNAPSHOT_EMAIL === "true",
+  aiAdvisorEnabled: process.env.AI_ADVISOR !== "false",
   notifyProvider,
+  gemini: {
+    apiKey: () => optionalEnv("GEMINI_API_KEY"),
+    model: optionalEnv("GEMINI_MODEL") ?? "gemini-3.8-flash",
+    advisorListingCap: optionalInt("GEMINI_ADVISOR_CAP") ?? 35,
+  },
   notify: {
     to: () => requireEnv("MAIL_TO"),
     from: () => resolveFromAddress(),

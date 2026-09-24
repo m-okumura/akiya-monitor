@@ -1,3 +1,4 @@
+import { parseMinRentYen } from "./money.js";
 import type { Listing } from "./types.js";
 
 export function applyOptionalFilters(
@@ -16,10 +17,4 @@ export function applyOptionalFilters(
     }
     return true;
   });
-}
-
-function parseMinRentYen(rentLabel: string): number | null {
-  const normalized = rentLabel.replace(/,/g, "").replace(/～.*$/, "");
-  const n = Number.parseInt(normalized, 10);
-  return Number.isNaN(n) ? null : n;
 }

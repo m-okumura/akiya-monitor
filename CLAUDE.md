@@ -26,13 +26,17 @@ npm run build    # tsc --noEmit
 
 | 変数 | 必須 | 説明 |
 |------|------|------|
-| `NOTIFY_PROVIDER` | 任意 | `resend`（本番）または `smtp`（デフォルト smtp） |
+| `NOTIFY_PROVIDER` | 任意 | `resend`（本番・デフォルト）または `smtp` |
 | `RESEND_API_KEY` / `MAIL_TO` | Resend 時 | API 送信 |
 | `MAIL_HOST` … / `MAIL_TO` | SMTP 時 | nodemailer |
 | `MAIL_FROM` | 任意 | From |
 | `MENSEKI_MIN` | 任意 | デフォルト 40 |
-| `YACHIN_MAX` | 任意 | 家賃上限（円）。未設定で無制限 |
+| `YACHIN_MAX` | 任意 | 家賃上限（円）。デフォルト **100000** |
+| `GEMINI_API_KEY` | AI 時 | Gemini。未設定なら AI 省略 |
+| `AI_ADVISOR` | 任意 | `false` で AI 無効（デフォルト有効） |
+| `GEMINI_MODEL` / `GEMINI_ADVISOR_CAP` | 任意 | モデル名 / AI に渡す上限件数（デフォルト 35） |
 | `NOTIFY_ON_FIRST_RUN` | 任意 | `true` で初回も通知 |
+| `SNAPSHOT_EMAIL` | 任意 | `true` で差分無視の一覧メール（AI 付き） |
 | `STATE_PATH` | 任意 | デフォルト `.data/state.json` |
 
 ## コーディング方針
